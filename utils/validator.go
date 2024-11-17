@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"CRUD-API/models"
+	"company-service/models"
 	"fmt"
 )
 

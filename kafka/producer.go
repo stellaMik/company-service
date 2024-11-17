@@ -1,7 +1,7 @@
 package kafka
 
 import (
-	"CRUD-API/models"
+	"company-service/models"
 	"encoding/json"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"log"

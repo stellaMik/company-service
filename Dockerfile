@@ -14,7 +14,7 @@ RUN go mod tidy
 COPY . .
 
 # Build the Go app (change "main" to the name of your Go binary)
-RUN go build -o CRUD-API ./cmd
+RUN go build -o company-service ./cmd
 
 # Step 2: Create the production image
 FROM debian:latest
@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the built Go binary from the builder stage
-COPY --from=builder /app/CRUD-API .
+COPY --from=builder /app/company-service .
 
 # Copy the .env file
 COPY .env .
@@ -40,4 +40,4 @@ COPY .env .
 EXPOSE 8080
 
 # Command to run the app
-CMD ["./CRUD-API"]
+CMD ["./company-service"]

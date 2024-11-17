@@ -22,7 +22,7 @@ package middleware
 	})
 }*/
 import (
-	"CRUD-API/config"
+	"company-service/config"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"

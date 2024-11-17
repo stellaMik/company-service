@@ -1,8 +1,8 @@
 package database
 
 import (
-	"CRUD-API/config"
-	"CRUD-API/models"
+	"company-service/config"
+	"company-service/models"
 	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"

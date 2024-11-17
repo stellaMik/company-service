@@ -1,11 +1,11 @@
 package main
 
 import (
-	"CRUD-API/config"
-	"CRUD-API/controllers"
-	"CRUD-API/database"
-	"CRUD-API/kafka"
-	"CRUD-API/middleware"
+	"company-service/config"
+	"company-service/controllers"
+	"company-service/database"
+	"company-service/kafka"
+	"company-service/middleware"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"

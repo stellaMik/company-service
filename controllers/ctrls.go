@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"CRUD-API/config"
-	"CRUD-API/database"
-	"CRUD-API/kafka"
-	"CRUD-API/middleware"
-	"CRUD-API/models"
-	"CRUD-API/utils"
+	"company-service/config"
+	"company-service/database"
+	"company-service/kafka"
+	"company-service/middleware"
+	"company-service/models"
+	"company-service/utils"
 	"encoding/json"
 	"errors"
 	"fmt"
