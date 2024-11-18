@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// ValidateCompanyUpdate validates the updated fields of a company.
 func ValidateCompanyUpdate(updatedFields map[string]interface{}) error {
 	// Iterate over the updated fields and validate each one
 	for field, value := range updatedFields {

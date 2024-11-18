@@ -22,6 +22,7 @@ type Config struct {
 	Password     string
 }
 
+// LoadConfig loads the configuration from the environment variables
 func LoadConfig() (*Config, error) {
 	err := godotenv.Load()
 	if err != nil {

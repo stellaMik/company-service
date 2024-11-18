@@ -8,7 +8,7 @@ import (
 type CompanyType string
 
 type Company struct {
-	ID          uuid.UUID  `json:"id" gorm:"primary_key"` //gorm:"type:char(36);primary_key"`
+	ID          uuid.UUID  `json:"id" gorm:"primary_key"`
 	Name        string     `json:"name" gorm:"size:15;unique;not null"`
 	Description string     `json:"description" gorm:"size:3000"`
 	Employees   int        `json:"employees" gorm:"not null"`

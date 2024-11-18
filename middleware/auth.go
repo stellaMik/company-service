@@ -37,6 +37,7 @@ func JwtMiddleware(next http.HandlerFunc, conf *config.Config) http.HandlerFunc 
 	}
 }
 
+// GenerateJWT generates a JWT token with the given username and secret
 func GenerateJWT(username, secret string) (string, error) {
 	// Set expiration time for token
 	expirationTime := time.Now().Add(15 * time.Minute)
