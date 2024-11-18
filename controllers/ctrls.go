@@ -178,6 +178,11 @@ func (app *App) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 		utils.SendErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("Invalid input data to update a company record: %v", err))
 		return
 	}
+	err = utils.ValidateCompanyUpdate(updatedFields)
+	if err != nil {
+		utils.SendErrorResponse(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	// Check if the data ID exists in the datastore and update it
 	company, err := app.DB.UpdateCompany(id, updatedFields)

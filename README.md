@@ -63,7 +63,7 @@ Once the services are up, you can access the API through `http://localhost:8080/
 
 ## Endpoints
 
-- **POST /login**: Authenticate user and obtain JWT and stores it in a cookie (15 minutes expiration) for secure access to protected routes.
+- **POST /login**: Authenticate user and obtain JWT and stores it in a cookie (15 minutes expiration) for secure access to protected routes. The default user's credentials are the ones you specified in .env file (API_USER, API_PASSWORD).
 - **POST /companies**: Create a new company entry. Only if user is authenticated.
 - **GET /companies/{id}**: Retrieve company details by ID.
 - **PATCH /companies/{id}**: Update existing company information. Only if user is authenticated.
