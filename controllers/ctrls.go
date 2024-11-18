@@ -25,7 +25,6 @@ type App struct {
 }
 
 // NewApp initializes and returns an instance of the App struct
-// func NewApp(db *gorm.DB, kafkaProducer *kafka.KafkaProducer, conf *config.Config) *App {
 func NewApp(db database.Database, producer kafka.Producer, conf *config.Config) *App {
 	return &App{
 		DB:            db,
