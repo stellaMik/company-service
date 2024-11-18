@@ -20,7 +20,8 @@ type Database interface {
 	UpdateCompany(id string, fields map[string]interface{}) (*models.Company, error)
 	DeleteCompany(id string) error
 	CreateDefaultUser(conf *config.Config) error
-	CheckIfExistsByID(id string) (*models.Company, error)
+	GetIfExistsByID(id string) (*models.Company, error)
+	CheckIfExistsByName(name string) bool
 	Close() error
 }
 
@@ -98,7 +99,7 @@ func (g *GormDatabase) CreateCompany(company *models.Company) error {
 
 // GetCompany retrieves a company by its ID from the database
 func (g *GormDatabase) GetCompany(id string) (*models.Company, error) {
-	company, err := g.CheckIfExistsByID(id)
+	company, err := g.GetIfExistsByID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +108,7 @@ func (g *GormDatabase) GetCompany(id string) (*models.Company, error) {
 
 // UpdateCompany updates a company record in the database
 func (g *GormDatabase) UpdateCompany(id string, updatedFeilds map[string]interface{}) (*models.Company, error) {
-	company, err := g.CheckIfExistsByID(id)
+	company, err := g.GetIfExistsByID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +120,7 @@ func (g *GormDatabase) UpdateCompany(id string, updatedFeilds map[string]interfa
 
 // DeleteCompany deletes a company record from the database
 func (g *GormDatabase) DeleteCompany(id string) error {
-	_, err := g.CheckIfExistsByID(id)
+	_, err := g.GetIfExistsByID(id)
 	if err != nil {
 		return err
 	}
@@ -130,8 +131,8 @@ func (g *GormDatabase) DeleteCompany(id string) error {
 	return nil
 }
 
-// CheckIfExistsByID checks if a company record exists in the database by its ID
-func (g *GormDatabase) CheckIfExistsByID(id string) (*models.Company, error) {
+// GetIfExistsByID checks if a company record exists in the database by its ID
+func (g *GormDatabase) GetIfExistsByID(id string) (*models.Company, error) {
 	// Check if the record exists by ID
 	var company models.Company
 	if err := g.db.First(&company, "id = ?", id).Error; err != nil {
@@ -144,6 +145,17 @@ func (g *GormDatabase) CheckIfExistsByID(id string) (*models.Company, error) {
 	}
 	// Return nil if the record exists
 	return &company, nil
+}
+
+// CheckIfExistsByName checks if a company record exists in the database by its name
+func (g *GormDatabase) CheckIfExistsByName(name string) bool {
+	// Check if the record exists by ID
+	var company models.Company
+	if err := g.db.First(&company, "name = ?", name).Error; err == nil {
+		return true
+	}
+	// Return false if the record does not exist
+	return false
 }
 
 // Close the database connection

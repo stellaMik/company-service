@@ -103,6 +103,10 @@ func (app *App) CreateCompany(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if app.DB.CheckIfExistsByName(company.Name) {
+		utils.SendErrorResponse(w, http.StatusConflict, "The company with the same name already exists")
+		return
+	}
 	// Validate the company input
 	if err := utils.ValidateCompanyInput(company); err != nil {
 		utils.SendErrorResponse(w, http.StatusBadRequest, err.Error())

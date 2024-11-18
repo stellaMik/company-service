@@ -48,9 +48,6 @@ func main() {
 	apiRouter.HandleFunc("/companies/{id}", middleware.JwtMiddleware(newApp.UpdateCompany, conf)).Methods("PATCH")
 	apiRouter.HandleFunc("/companies/{id}", middleware.JwtMiddleware(newApp.DeleteCompany, conf)).Methods("DELETE")
 
-	if conf.APIPort == "" {
-		conf.APIPort = "8080"
-	}
 	//Start server
 	log.Println("Start company service API on port", conf.APIPort)
 	// Use the port from the configuration.
