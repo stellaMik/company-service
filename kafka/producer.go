@@ -13,7 +13,7 @@ type Producer interface {
 	Close()
 }
 
-// Producer wraps the Kafka producer
+// KafkaProducer Producer wraps the Kafka producer
 type KafkaProducer struct {
 	producer *kafka.Producer
 	topic    string
@@ -25,7 +25,7 @@ type EventMessage struct {
 	Company   *models.Company `json:"company"`
 }
 
-// InitializeKafkaProducer initializes a Kafka producer
+// NewKafkaProducer creates a new Kafka producer
 func NewKafkaProducer(kafkaURL string, topic string) (*KafkaProducer, error) {
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
 		"bootstrap.servers": kafkaURL,
@@ -37,6 +37,7 @@ func NewKafkaProducer(kafkaURL string, topic string) (*KafkaProducer, error) {
 	return &KafkaProducer{producer: p, topic: topic}, nil
 }
 
+// ProduceEvent produces an event to the Kafka topic
 func (p *KafkaProducer) ProduceEvent(event *EventMessage) error {
 	deliveryChan := make(chan kafka.Event)
 	// Serialize the event to JSON

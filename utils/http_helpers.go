@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-//Gets and checks a UUID parameter from an HTTP request.
+// GetUUIDParam gets and checks a UUID parameter from an HTTP request.
 func GetUUIDParam(r *http.Request, param string) (string, error) {
 	uuid, ok := mux.Vars(r)[param]
 	if !ok {

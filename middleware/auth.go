@@ -29,6 +29,7 @@ import (
 	"time"
 )
 
+// JwtMiddleware is a middleware that checks if the request has a valid JWT token
 func JwtMiddleware(next http.HandlerFunc, conf *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Get the token from the cookie

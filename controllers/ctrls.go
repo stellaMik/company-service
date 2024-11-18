@@ -34,14 +34,7 @@ func NewApp(db database.Database, producer kafka.Producer, conf *config.Config) 
 	}
 }
 
-/*func NewApp(db *gorm.DB, producer *kafka.KafkaProducer, conf *config.Config) *App {
-	return &App{
-		DB:            db,
-		KafkaProducer: producer,
-		Config:        conf,
-	}
-}*/
-
+// Login authenticates the user and sends a JWT token
 func (app *App) Login(w http.ResponseWriter, r *http.Request) {
 	var loginRequest struct {
 		Username string `json:"username"`
@@ -97,6 +90,7 @@ func (app *App) Login(w http.ResponseWriter, r *http.Request) {
 	utils.SendJSONResponse(w, http.StatusOK, map[string]string{"message": "Login successful"})
 }
 
+// CreateCompany creates a new company record
 func (app *App) CreateCompany(w http.ResponseWriter, r *http.Request) {
 	var company *models.Company
 
@@ -150,6 +144,7 @@ func (app *App) CreateCompany(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// GetCompany retrieves a company record with the given ID
 func (app *App) GetCompany(w http.ResponseWriter, r *http.Request) {
 	//Get UUID parameter
 	id, err := utils.GetUUIDParam(r, "id")
@@ -166,7 +161,7 @@ func (app *App) GetCompany(w http.ResponseWriter, r *http.Request) {
 	utils.SendJSONResponse(w, http.StatusOK, &company)
 }
 
-// Update a solar panel record with the given id
+// UpdateCompany a solar panel record with the given id
 func (app *App) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 	//Get UUID parameter
 	id, err := utils.GetUUIDParam(r, "id")
@@ -221,7 +216,7 @@ func (app *App) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Delete a solar panel record with the given id
+// DeleteCompany a solar panel record with the given id
 func (app *App) DeleteCompany(w http.ResponseWriter, r *http.Request) {
 	//Get UUID parameter
 	id, err := utils.GetUUIDParam(r, "id")
@@ -241,6 +236,9 @@ func (app *App) DeleteCompany(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	parsedUUID, err := utils.GenerateUUIDFromString(id)
+	if err != nil {
+		log.Printf("Could not parse UUID from string: %v", err)
+	}
 	eventMessage := kafka.EventMessage{
 		EventType: "company_deleted",
 		Timestamp: time.Now().UTC().Format(time.RFC3339),
