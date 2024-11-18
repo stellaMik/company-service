@@ -45,7 +45,7 @@ func TestIntegration(t *testing.T) {
 	var dbInterface database.Database = db
 	var kafkaProducerInterface kafka.Producer = kafkaProducer
 	newApp := controllers.App{DB: dbInterface, KafkaProducer: kafkaProducerInterface, Config: conf}
-	consumedMessages := make(chan kafka.EventMessage, 10)
+	consumedEvents := make(chan kafka.EventMessage)
 	var wg sync.WaitGroup
 
 	router := mux.NewRouter()
@@ -71,7 +71,7 @@ func TestIntegration(t *testing.T) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		kafkaConsumer.ConsumeMessage(ctx, conf.KafkaTopic, consumedMessages)
+		kafkaConsumer.ConsumeEvents(ctx, conf.KafkaTopic, consumedEvents)
 	}()
 
 	// Step 0: Login
@@ -141,9 +141,9 @@ func TestIntegration(t *testing.T) {
 	}
 
 	select {
-	case consumedMessage := <-consumedMessages:
-		assert.Equal(t, "company_created", consumedMessage.EventType)
-		assert.Equal(t, createdCompany.Company, *consumedMessage.Company)
+	case consumedEvent := <-consumedEvents:
+		assert.Equal(t, "company_created", consumedEvent.EventType)
+		assert.Equal(t, createdCompany.Company, *consumedEvent.Company)
 	case <-time.After(60 * time.Second):
 		t.Errorf("Timed out waiting for message on topic %s", conf.KafkaTopic)
 	}
@@ -194,9 +194,9 @@ func TestIntegration(t *testing.T) {
 	assert.Equal(t, updateFields["name"], updatedCompany.Company.Name)
 
 	select {
-	case consumedMessage := <-consumedMessages:
-		assert.Equal(t, "company_updated", consumedMessage.EventType)
-		assert.Equal(t, updatedCompany.Company, *consumedMessage.Company)
+	case consumedEvent := <-consumedEvents:
+		assert.Equal(t, "company_updated", consumedEvent.EventType)
+		assert.Equal(t, updatedCompany.Company, *consumedEvent.Company)
 	case <-time.After(30 * time.Second):
 		t.Errorf("Timed out waiting for message on topic %s", conf.KafkaTopic)
 	}
@@ -214,9 +214,9 @@ func TestIntegration(t *testing.T) {
 	assert.Equal(t, http.StatusNoContent, rr.Code)
 
 	select {
-	case consumedMessage := <-consumedMessages:
-		assert.Equal(t, "company_deleted", consumedMessage.EventType)
-		assert.Equal(t, createdCompany.Company.ID.String(), consumedMessage.Company.ID.String())
+	case consumedEvent := <-consumedEvents:
+		assert.Equal(t, "company_deleted", consumedEvent.EventType)
+		assert.Equal(t, createdCompany.Company.ID.String(), consumedEvent.Company.ID.String())
 	case <-time.After(30 * time.Second):
 		t.Errorf("Timed out waiting for message on topic %s", conf.KafkaTopic)
 	}

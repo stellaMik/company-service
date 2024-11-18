@@ -33,34 +33,8 @@ func NewKafkaConsumer(kafkaURL, groupID, topic string) (*KafkaConsumer, error) {
 	return &KafkaConsumer{consumer: c}, nil
 }
 
-// ConsumeEvents listens for events from Kafka and processes them
-func (c *KafkaConsumer) ConsumeEvents() {
-	for {
-		// Read message with a timeout of 1000 milliseconds
-		msg, err := c.consumer.ReadMessage(1000)
-		if err != nil {
-			if err.(kafka.Error).Code() == kafka.ErrTimedOut {
-				// Timeout error is expected for polling, so we continue
-				continue
-			}
-			log.Printf("Error consuming message: %v", err)
-			continue
-		}
-
-		var event map[string]interface{}
-		err = json.Unmarshal(msg.Value, &event)
-		if err != nil {
-			log.Printf("Error unmarshaling event: %v", err)
-			continue
-		}
-
-		log.Printf("Received event: %s, Data: %v", event["event"], event["data"])
-		// You can process the event here (e.g., logging, updating the database, etc.)
-	}
-}
-
-// ConsumeMessage listens for messages from a specific topic and sends them to a channel
-func (c *KafkaConsumer) ConsumeMessage(ctx context.Context, topic string, consumedMessages chan EventMessage) {
+// ConsumeEvents listens for messages from a specific topic and sends them to a channel
+func (c *KafkaConsumer) ConsumeEvents(ctx context.Context, topic string, consumedEvents chan EventMessage) {
 	for {
 		select {
 		case <-ctx.Done(): // Context canceled or expired
@@ -76,7 +50,7 @@ func (c *KafkaConsumer) ConsumeMessage(ctx context.Context, topic string, consum
 					log.Printf("Error unmarshaling event: %v", err)
 					continue
 				}
-				consumedMessages <- event
+				consumedEvents <- event
 			}
 		}
 	}
