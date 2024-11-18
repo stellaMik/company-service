@@ -115,7 +115,7 @@ func (app *App) CreateCompany(w http.ResponseWriter, r *http.Request) {
 	//Generate a new UUID
 	id := utils.GenerateUUID()
 	company.ID = id
-	// Fill up the map datastore with id as key and solar panel data as value
+
 	err = app.DB.CreateCompany(company)
 	if err != nil {
 		utils.SendErrorResponse(w, http.StatusInternalServerError, err.Error())
@@ -164,7 +164,7 @@ func (app *App) GetCompany(w http.ResponseWriter, r *http.Request) {
 	utils.SendJSONResponse(w, http.StatusOK, &company)
 }
 
-// UpdateCompany a solar panel record with the given id
+// UpdateCompany a company record with the given id
 func (app *App) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 	//Get UUID parameter
 	id, err := utils.GetUUIDParam(r, "id")
@@ -224,7 +224,7 @@ func (app *App) UpdateCompany(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// DeleteCompany a solar panel record with the given id
+// DeleteCompany a company record with the given id
 func (app *App) DeleteCompany(w http.ResponseWriter, r *http.Request) {
 	//Get UUID parameter
 	id, err := utils.GetUUIDParam(r, "id")
