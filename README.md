@@ -1,4 +1,4 @@
-# company-service
+# Company-service
 
 ## Overview
 
@@ -98,7 +98,6 @@ PASSWORD=testpassword
 
 You can modify the values based on your local setup.
 
-
 ## Running Test
 
 1. **Start Kafka and the Database**: Run Kafka and database using Docker. You can use the following included `docker-compose.yml` file.
@@ -132,6 +131,42 @@ The test performs the following steps:
 6. **Verify Deletion**:
 
    - The test ensures that after the company is deleted, a `GET` request to retrieve the company returns a `404 Not Found`.
+
+# Unit Testing
+
+Unit tests are crucial for verifying the functionality of each component in application. They help identify bugs early in the development process and ensure that new changes do not break existing functionality.
+
+## controllers_test Package
+
+The `controllers_test` package contains tests for the controller functions that manage incoming HTTP requests and generate responses. It is structured to cover a range of scenarios, ensuring that each controller behaves correctly under different conditions.
+
+### Test Structure
+
+- **Naming Convention**: Each test function is prefixed with `Test` followed by the function name being tested. This clear naming convention helps with identifying which pieces of functionality are being validated.
+- **Testing Framework**: We utilize Go's built-in testing framework (`testing`) to facilitate the creation and execution of our tests.
+
+### Test Scenarios
+
+The tests in the `controllers_test` package cover various scenarios, including:
+
+- **Successful Requests**: Testing normal behavior when valid data is provided.
+- **Error Handling**: Validating how controllers respond to invalid inputs or erroneous conditions.
+- **Edge Cases**: Ensuring the application handles unexpected scenarios gracefully.
+
+### Mocking and Isolation
+
+To maintain test reliability and avoid side effects, we isolate database calls by using:
+
+- **Mocking**: Creating mock responses for database interactions to simulate various states without affecting the actual database.
+- **Testing Servers**: Utilizing the `httptest` package in Go to create test servers and simulate HTTP requests, allowing us to validate the controller responses without needing a live server.
+
+## Run Tests
+
+To execute the tests in the `controllers_test` package, run the following command in the terminal:
+
+```bash
+go test -v
+```
 
 ## Notes
 
